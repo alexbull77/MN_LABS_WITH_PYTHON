@@ -1,9 +1,9 @@
 import numpy as np
 import sys
-import math
 import pprint
 import scipy
 import scipy.linalg
+
 
 f1 = lambda x1,x2,x3, x4: (7.2 + 0.9*x2 - 0.6*x3 - 0.8*x4) / 8.1
 f2 = lambda x1,x2,x3, x4: (10.3 + 0.9*x1 - 0.3*x3 - 0.7*x4) / 14.3 
@@ -24,13 +24,6 @@ a = [
     [0.6, 0.3, 7.9, -0.4, -11.9],
     [0.8, 0.7, -0.4, 10.6, 9.2]
 ]
-a_mod = [
-    [8.1, -0.9, 0.6, 0.8],
-    [-0.9, 14.3, 0.3, 0.7],
-    [0.6, 0.3, 7.9, -0.4],
-    [0.8, 0.7, -0.4, 10.6]
-]
-v_res = [7.2, 10.3, -11.9, 9.2]
 
 def Gauss():
     x = np.zeros(n)
@@ -87,11 +80,33 @@ def GaussJordan():
         print (f'x{i + 1} = {x[i]}')
     print ('\n\n')
 
-def cholesky():
-    L = scipy.linalg.cholesky(a_mod, lower=True)
-    pprint.pprint (L)
-        
-            
+def PowerMethod():
+    b = np.array([7.2, 10.3, -11.9, 9.2])
+    a = np.array([
+        [8.1, -0.9, 0.6, 0.8],
+        [-0.9, 14.3, 0.3, 0.7],
+        [0.6, 0.3, 7.9, -0.4],
+        [0.8, 0.7, -0.4, 10.6]
+    ])
+    l = scipy.linalg.cholesky(a, lower=True)
+    pprint.pprint(l)
+
+    y1 = l[0][0] / b[0]
+    y2 = (b[1] - l[1][0] * y1) / l[1][1]
+    y3 = (b[2] - l[2][0]*y1 - l[2][1]*y2) / l[2][2]
+    y4 = (b[3] - l[3][0]*y1 - l[3][1]*y2 - l[3][2]*y3) / l[3][3]  
+    print('Power Method: ')  
+    print('Array of y:')        
+    print(y1, y2, y3, y4) 
+
+    x4 = y4 / l[3][3]
+    x3 = (y3 - l[3][2]*x4) / l[2][2]
+    x2 = (y2 - l[2][1]*x3 - l[3][1]*x3) / l[1][1]
+    x1 = (y1 - l[1][0]*x2 - l[2][0]*x2 - l[3][0]*x2) / l[0][0]
+    print(f'\nSolution is:\n\nx1 = {x1}\nx2 = {x2}\nx3 = {x3}\nx4 = {x4}\n')
+
+
+
 def JacobiMethod():
         # Initial setup
     x1_0 = 0
@@ -114,7 +129,7 @@ def JacobiMethod():
         x3_1 = f3(x1_0, x2_0, x3_0, x4_0)
         x4_1 = f4(x1_0, x2_0, x3_0, x4_0)
 
-        print('%d\t%0.3f\t%0.3f\t%0.3f\t%0.3f\n' %(count, x1_1, x2_1, x3_1, x4_1))
+        print('%d\t%0.4f\t%0.4f\t%0.4f\t%0.4f\n' %(count, x1_1, x2_1, x3_1, x4_1))
         e1 = abs(x1_0-x1_1)
         e2 = abs(x2_0-x2_1)
         e3 = abs(x3_0-x3_1)
@@ -128,7 +143,7 @@ def JacobiMethod():
         
         condition = e1>e and e2>e and e3>e and e4>e
 
-    print('\nSolution is:\n\nx1=%0.3f\nx2=%0.3f\nx3 = %0.3f\nx4 = %0.3f\n'% (x1_1, x2_1, x3_1, x4_1))
+    print('\nSolution is:\n\nx1 = %0.4f\nx2 = %0.4f\nx3 = %0.4f\nx4 = %0.4f\n'% (x1_1, x2_1, x3_1, x4_1))
     
 def Gauss_Seidel_Method():
     # Initial setup
@@ -166,14 +181,14 @@ def Gauss_Seidel_Method():
         
         condition = e1>e and e2>e and e3>e and e4>e
 
-    print('\nSolution is:\n\nx1=%0.4f\nx2=%0.4f\nx3 = %0.4f\nx4 = %0.4f\n'% (x1_1, x2_1, x3_1, x4_1))
+    print('\nSolution is:\n\nx1 = %0.4f\nx2 = %0.4f\nx3 = %0.4f\nx4 = %0.4f\n'% (x1_1, x2_1, x3_1, x4_1))
 
 def main():
     Gauss()
     GaussJordan()
     JacobiMethod()
     Gauss_Seidel_Method()
-    cholesky()
+    PowerMethod()
 
 if __name__ == "__main__":
     main()
