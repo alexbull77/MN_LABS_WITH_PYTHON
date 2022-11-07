@@ -1,3 +1,5 @@
+#http://mathhelpplanet.com/static.php?p=chislennyye-metody-resheniya-slau
+
 import numpy as np
 import sys
 import pprint
@@ -80,7 +82,8 @@ def GaussJordan():
         print (f'x{i + 1} = {x[i]}')
     print ('\n\n')
 
-def PowerMethod():
+def SquareRootMethod():
+    print('Square Root Method: ')  
     b = np.array([7.2, 10.3, -11.9, 9.2])
     a = np.array([
         [8.1, -0.9, 0.6, 0.8],
@@ -88,23 +91,28 @@ def PowerMethod():
         [0.6, 0.3, 7.9, -0.4],
         [0.8, 0.7, -0.4, 10.6]
     ])
+
     l = scipy.linalg.cholesky(a, lower=True)
     pprint.pprint(l)
 
-    y1 = l[0][0] / b[0]
+    y1 = b[0] / l[0][0]
     y2 = (b[1] - l[1][0] * y1) / l[1][1]
     y3 = (b[2] - l[2][0]*y1 - l[2][1]*y2) / l[2][2]
     y4 = (b[3] - l[3][0]*y1 - l[3][1]*y2 - l[3][2]*y3) / l[3][3]  
-    print('Power Method: ')  
+
+    print()
     print('Array of y:')        
     print(y1, y2, y3, y4) 
 
-    x4 = y4 / l[3][3]
-    x3 = (y3 - l[3][2]*x4) / l[2][2]
-    x2 = (y2 - l[2][1]*x3 - l[3][1]*x3) / l[1][1]
-    x1 = (y1 - l[1][0]*x2 - l[2][0]*x2 - l[3][0]*x2) / l[0][0]
-    print(f'\nSolution is:\n\nx1 = {x1}\nx2 = {x2}\nx3 = {x3}\nx4 = {x4}\n')
+    print()
+    u = scipy.linalg.cholesky(a, lower=False)
+    pprint.pprint(u)
 
+    x4 = y4 / u[3][3]
+    x3 = (y3 - u[2][3]*x4) / u[2][2]
+    x2 = (y2 - u[1][2]*x3 - u[1][3]*x4) / u[1][1]
+    x1 = (y1 - u[0][1]*x2 - u[0][2]*x3 - u[0][3]*x4) / u[0][0]
+    print(f'\nSolution is:\n\nx1 = {x1}\nx2 = {x2}\nx3 = {x3}\nx4 = {x4}\n')
 
 
 def JacobiMethod():
@@ -186,9 +194,9 @@ def Gauss_Seidel_Method():
 def main():
     Gauss()
     GaussJordan()
+    SquareRootMethod()
     JacobiMethod()
     Gauss_Seidel_Method()
-    PowerMethod()
 
 if __name__ == "__main__":
     main()
