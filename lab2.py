@@ -1,6 +1,7 @@
 #http://mathhelpplanet.com/static.php?p=chislennyye-metody-resheniya-slau
 
 import numpy as np
+import math
 import sys
 import pprint
 import scipy
@@ -99,7 +100,7 @@ def SquareRootMethod():
     y2 = (b[1] - l[1][0] * y1) / l[1][1]
     y3 = (b[2] - l[2][0]*y1 - l[2][1]*y2) / l[2][2]
     y4 = (b[3] - l[3][0]*y1 - l[3][1]*y2 - l[3][2]*y3) / l[3][3]  
-
+    
     print()
     print('Array of y:')        
     print(y1, y2, y3, y4) 
@@ -107,6 +108,12 @@ def SquareRootMethod():
     print()
     u = scipy.linalg.cholesky(a, lower=False)
     pprint.pprint(u)
+    
+    x4 = y4 / l[3][3]
+    x3 = (y3 - l[3][2]*x4) / l[2][2]
+    x2 = (y2 - (l[2][1]*x3 + l[3][1]*x3)) / l[1][1]
+    x1 = (y1 - (l[1][0]*x2 + l[2][0]*x2 + l[3][0]*x2)) / l[0][0]
+    print(f'\nSolution is:\n\nx1 = {x1}\nx2 = {x2}\nx3 = {x3}\nx4 = {x4}\n')
 
     x4 = y4 / u[3][3]
     x3 = (y3 - u[2][3]*x4) / u[2][2]
@@ -114,9 +121,8 @@ def SquareRootMethod():
     x1 = (y1 - u[0][1]*x2 - u[0][2]*x3 - u[0][3]*x4) / u[0][0]
     print(f'\nSolution is:\n\nx1 = {x1}\nx2 = {x2}\nx3 = {x3}\nx4 = {x4}\n')
 
-
 def JacobiMethod():
-        # Initial setup
+    # Initial setup
     x1_0 = 0
     x2_0 = 0
     x3_0 = 0
