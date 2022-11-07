@@ -1,4 +1,5 @@
 import numpy as np
+import math
 import sys
 import pprint
 import scipy
@@ -81,6 +82,7 @@ def GaussJordan():
     print ('\n\n')
 
 def PowerMethod():
+    print('Power Method: ')  
     b = np.array([7.2, 10.3, -11.9, 9.2])
     a = np.array([
         [8.1, -0.9, 0.6, 0.8],
@@ -88,27 +90,37 @@ def PowerMethod():
         [0.6, 0.3, 7.9, -0.4],
         [0.8, 0.7, -0.4, 10.6]
     ])
-    l = scipy.linalg.cholesky(a, lower=True)
+    
+    l = np.zeros((n, n))
+    for i in range(n):
+        for k in range(i+1):
+            tmp_sum = sum(l[i][j] * l[k][j] for j in range(k))
+            
+            if (i == k): # Diagonal elements
+                l[i][k] = math.sqrt(a[i][i] - tmp_sum)
+            else:
+                l[i][k] = (1.0 / l[k][k] * (a[i][k] - tmp_sum))
+
+    # l = scipy.linalg.cholesky(a, lower=True)
     pprint.pprint(l)
 
-    y1 = l[0][0] / b[0]
+    y1 = b[0] / l[0][0]
     y2 = (b[1] - l[1][0] * y1) / l[1][1]
     y3 = (b[2] - l[2][0]*y1 - l[2][1]*y2) / l[2][2]
     y4 = (b[3] - l[3][0]*y1 - l[3][1]*y2 - l[3][2]*y3) / l[3][3]  
-    print('Power Method: ')  
+    print()
     print('Array of y:')        
     print(y1, y2, y3, y4) 
 
     x4 = y4 / l[3][3]
     x3 = (y3 - l[3][2]*x4) / l[2][2]
-    x2 = (y2 - l[2][1]*x3 - l[3][1]*x3) / l[1][1]
-    x1 = (y1 - l[1][0]*x2 - l[2][0]*x2 - l[3][0]*x2) / l[0][0]
+    x2 = (y2 - (l[2][1]*x3 + l[3][1]*x3)) / l[1][1]
+    x1 = (y1 - (l[1][0]*x2 + l[2][0]*x2 + l[3][0]*x2)) / l[0][0]
     print(f'\nSolution is:\n\nx1 = {x1}\nx2 = {x2}\nx3 = {x3}\nx4 = {x4}\n')
 
 
-
 def JacobiMethod():
-        # Initial setup
+    # Initial setup
     x1_0 = 0
     x2_0 = 0
     x3_0 = 0
