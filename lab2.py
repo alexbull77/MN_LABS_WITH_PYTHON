@@ -15,7 +15,7 @@ f4 = lambda x1,x2,x3, x4: (9.2 - 0.8*x1 - 0.7*x2 + 0.4*x3) / 10.6
 # number of unknowns
 n = 4
 # tolerable error
-eps = 0.00001
+eps = 0.001
 # max number of iterations
 m = 100
 
