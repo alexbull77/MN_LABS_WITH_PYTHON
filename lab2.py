@@ -1,7 +1,6 @@
 #http://mathhelpplanet.com/static.php?p=chislennyye-metody-resheniya-slau
 
 import numpy as np
-import math
 import sys
 import pprint
 import scipy
@@ -20,7 +19,6 @@ eps = 0.00001
 # max number of iterations
 m = 100
 
-a = np.zeros((n,n+1))
 a = [
     [8.1, -0.9, 0.6, 0.8, 7.2],
     [-0.9, 14.3, 0.3, 0.7, 10.3],
@@ -41,7 +39,7 @@ def Gauss():
             
             for k in range(n+1):
                 a[j][k] = a[j][k] - ratio * a[i][k]
-
+                
     # Back Substitution
     x[n-1] = a[n-1][n]/a[n-1][n-1]
 
@@ -74,7 +72,6 @@ def GaussJordan():
                     a[j][k] = a[j][k] - ratio * a[i][k]
 
     # Obtaining Solution
-
     for i in range(n):
         x[i] = a[i][n]/a[i][i]
 
@@ -111,14 +108,8 @@ def SquareRootMethod():
     
     x4 = y4 / l[3][3]
     x3 = (y3 - l[3][2]*x4) / l[2][2]
-    x2 = (y2 - (l[2][1]*x3 + l[3][1]*x3)) / l[1][1]
-    x1 = (y1 - (l[1][0]*x2 + l[2][0]*x2 + l[3][0]*x2)) / l[0][0]
-    print(f'\nSolution is:\n\nx1 = {x1}\nx2 = {x2}\nx3 = {x3}\nx4 = {x4}\n')
-
-    x4 = y4 / u[3][3]
-    x3 = (y3 - u[2][3]*x4) / u[2][2]
-    x2 = (y2 - u[1][2]*x3 - u[1][3]*x4) / u[1][1]
-    x1 = (y1 - u[0][1]*x2 - u[0][2]*x3 - u[0][3]*x4) / u[0][0]
+    x2 = (y2 - l[2][1]*x3 - l[3][1]*x4) / l[1][1]
+    x1 = (y1 - l[1][0]*x2 - l[2][0]*x3 - l[3][0]*x4) / l[0][0]
     print(f'\nSolution is:\n\nx1 = {x1}\nx2 = {x2}\nx3 = {x3}\nx4 = {x4}\n')
 
 def JacobiMethod():
