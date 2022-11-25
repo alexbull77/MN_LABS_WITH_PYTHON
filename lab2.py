@@ -6,7 +6,6 @@ import pprint
 import scipy
 import scipy.linalg
 
-
 f1 = lambda x1,x2,x3, x4: (7.2 + 0.9*x2 - 0.6*x3 - 0.8*x4) / 8.1
 f2 = lambda x1,x2,x3, x4: (10.3 + 0.9*x1 - 0.3*x3 - 0.7*x4) / 14.3 
 f3 = lambda x1,x2,x3, x4: (-11.9 - 0.6*x1 - 0.3*x2 + 0.4*x4) / 7.9
@@ -40,6 +39,8 @@ def Gauss():
             for k in range(n+1):
                 a[j][k] = a[j][k] - ratio * a[i][k]
                 
+    pprint.pprint(a)
+                
     # Back Substitution
     x[n-1] = a[n-1][n]/a[n-1][n-1]
 
@@ -70,6 +71,8 @@ def GaussJordan():
 
                 for k in range(n+1):
                     a[j][k] = a[j][k] - ratio * a[i][k]
+                    
+    pprint.pprint(a)
 
     # Obtaining Solution
     for i in range(n):
@@ -81,7 +84,7 @@ def GaussJordan():
     print ('\n\n')
 
 def SquareRootMethod():
-    print('Square Root Method: ')  
+    print('Square Root Method: \n')  
     b = np.array([7.2, 10.3, -11.9, 9.2])
     a = np.array([
         [8.1, -0.9, 0.6, 0.8],
@@ -98,13 +101,7 @@ def SquareRootMethod():
     y3 = (b[2] - l[2][0]*y1 - l[2][1]*y2) / l[2][2]
     y4 = (b[3] - l[3][0]*y1 - l[3][1]*y2 - l[3][2]*y3) / l[3][3]  
     
-    print()
-    print('Array of y:')        
-    print(y1, y2, y3, y4) 
-
-    print()
-    u = scipy.linalg.cholesky(a, lower=False)
-    pprint.pprint(u)
+    print(f'\nArray of y is:\n\ny1 = {y1}\ny2 = {y2}\ny3 = {y3}\ny4 = {y4}\n')      
     
     x4 = y4 / l[3][3]
     x3 = (y3 - l[3][2]*x4) / l[2][2]
