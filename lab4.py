@@ -38,13 +38,13 @@ def rk4(X0, Y0, STEP):
     k3 = []
     k4 = []
     k = []
-    for i in range(N):
-        k1.append(STEP * FUN(X[i - 1], Y[i - 1]))
-        k2.append(STEP * FUN((X[i - 1] + STEP/2), (Y[i - 1] + k1[-1]/2)))
-        k3.append(STEP * FUN((X[i - 1] + STEP/2), (Y[i - 1] + k2[-1]/2)))
-        k4.append(STEP * FUN((X[i - 1] + STEP), (Y[i - 1] + k3[-1])))
-        k.append((k1[-1] + 2*k2[-1] + 2*k3[-1] + k4[-1])/6)
-        Y.append(Y[i - 1] + k[-1])
+    for x in X:
+        k1.append(STEP * FUN(x, Y[-1]))
+        k2.append(STEP * FUN((x + STEP/2), (Y[-1] + k1[-1]/2)))
+        k3.append(STEP * FUN((x + STEP/2), (Y[-1] + k2[-1]/2)))
+        k4.append(STEP * FUN((x + STEP), (Y[-1] + k3[-1])))
+        k.append((k1[-1] + 2*k2[-1] + 2*k3[-1] + k4[-1]) / 6)
+        Y.append(Y[-1] + k[-1])
 
     print("RK4 Method: ")
     print(tabulate({"STEP": [i for i in range(1, N + 1)],
